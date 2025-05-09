@@ -4,16 +4,30 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Current Time: {{ currentTime }}</h2>
+<ion-content class="ion-padding content-center">
+  <h2 class="time-text">🕒 {{ currentTime }}</h2>
 
-  <div *ngIf="timerRunning">
+  <div *ngIf="timerRunning || pausedCountdown" class="timer-box" [ngClass]="{ break: isBreak }">
     <h1>{{ formatTime(countdown) }}</h1>
-    <h3 *ngIf="isBreak">Break Time</h3>
-    <h3 *ngIf="!isBreak">Work Time</h3>
+    <h3>{{ isBreak ? '🛋 Break Time' : '💼 Work Time' }}</h3>
   </div>
-
-  <div *ngIf="!timerRunning">
-    <ion-button expand="block" (click)="startPomodoro()">Start Pomodoro Cycle</ion-button>
+  
+  <div class="button-group">
+    <ion-button expand="block" color="primary" (click)="startPomodoro()" [disabled]="timerRunning">
+      {{ pausedCountdown ? 'Resume Pomodoro' : 'Start Pomodoro' }}
+    </ion-button>
+  
+    <ion-button expand="block" color="tertiary" (click)="startManualBreak()" [disabled]="timerRunning">
+      Start Break
+    </ion-button>
+  
+    <ion-button expand="block" color="warning" (click)="stopTimer()" [disabled]="!timerRunning">
+      Pause
+    </ion-button>
+  
+    <ion-button expand="block" color="danger" (click)="resetTimer()">
+      Reset
+    </ion-button>
   </div>
+  
 </ion-content>
